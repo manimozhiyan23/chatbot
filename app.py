@@ -9,7 +9,7 @@ CORS(app)  # Enables Cross-Origin requests (important for frontend communication
 intents = {
     "intents": [
         {
-            "student": ["Hi", "How are you", "Is anyone there?", "Hello", "Good day"],
+            "student": ["Hi","hii", "How are you", "Is anyone there?", "Hello", "Good day"],
             "cre": ["Hello, thanks for visiting", "Good to see you again", "Hi there, how can I help?"]
         },
         {
