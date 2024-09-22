@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot for Company and Employee</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .chat-container {
+            width: 500px;
+            margin: 100px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .chat-box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        .chat-box .message {
+            padding: 5px;
+            margin: 5px 0;
+        }
+        .chat-box .user {
+            text-align: right;
+            color: blue;
+        }
+        .chat-box .bot {
+            text-align: left;
+            color: green;
+        }
+        select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box">
+            <!-- Messages will appear here -->
+        </div>
+
+        <!-- Dropdown to select predefined questions -->
+        <select id="user-input">
+            <option value="">Select a question...</option>
+            <option>Hi</option>
+            <option>How are you</option>
+            <option>Is anyone there?</option>
+            <option>Hello</option>
+            <option>Good day</option>
+            <option>Bye</option>
+            <option>See you later</option>
+            <option>Goodbye</option>
+            <option>Thanks</option>
+            <option>Thank you</option>
+            <option>That's helpful</option>
+            <option>How to join in workshop?</option>
+            <option>How to apply the workshop?</option>
+            <option>When and where is the workshop taking place?</option>
+            <option>What are the registration requirements?</option>
+            <option>How can I register for the workshop?</option>
+            <option>How can I get more information or contact the organizers?</option>
+            <option>Are there any additional fees or charges?</option>
+            <option>Is there a payment deadline?</option>
+            <option>Is there a minimum payment amount?</option>
+            <option>Is there a registration fee?</option>
+            <option>What time does the event start and end?</option>
+            <option>Will there be reminders or notifications before the event?</option>
+            <option>What is the time and date for the event?</option>
+            <option>Is the timing flexible?</option>
+            <option>When is the event/appointment/meeting scheduled?</option>
+            <option>Will I be able to get the certificate after completing workshop?</option>
+            <option>If any complaints or doubts</option>
+            <option>cre number</option>
+        </select>
+        
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById("user-input").value;
+            if (userInput.trim() === "") return;
+
+            const chatBox = document.getElementById("chat-box");
+
+            // Add user message to the chat
+            const userMessage = document.createElement("div");
+            userMessage.classList.add("message", "user");
+            userMessage.textContent = userInput;
+            chatBox.appendChild(userMessage);
+
+            // Clear the selection
+            document.getElementById("user-input").value = "";
+
+            // Send message to the backend
+            try {
+                const response = await fetch("http://127.0.0.1:5000/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ message: userInput })
+                });
+
+                const data = await response.json();
+
+                // Add bot response to the chat
+                const botMessage = document.createElement("div");
+                botMessage.classList.add("message", "bot");
+                botMessage.textContent = data.response;
+                chatBox.appendChild(botMessage);
+
+                // Scroll to the bottom of the chat
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+    </script>
+</body>
+</html>
